@@ -9,18 +9,17 @@ h1{
 </style>
 
 {% block content %}
-<h1>Hello. We have {{ number }} videos</h1>
-<p>{{ videos }}</p>
+<h1>Hello. We have {{ number }} embeded videos</h1>
+
 <div>
 	{% for video in videos %}
-		<div>{{ video.embed_code }}</div>
+		<div>{{ video.embed_code | safe}}</div>
 	{% endfor %}
 </div>
-
+<h1>Mark Safe - Server-side handler</h1>
 <div>
 	{% for embed in embeds %}
-	<div>{{ embed }}</div>
+	<div>{{ embed | safe}}</div>
 	{% endfor %}
-
 </div>
 {% endblock content %}

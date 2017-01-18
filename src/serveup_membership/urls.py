@@ -16,12 +16,16 @@ Including another URLconf
 from django.conf.urls import url
 from django.contrib import admin
 
-from serveup_membership.views import home
+from serveup_membership.views import home, staff_home, auth_login, auth_logout
 from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home, name='home'),
     # url(r'', TemplateView.as_view(template_name='base.html'), name='home')
+    url(r'^staff/$', staff_home, name='staff'),
+    url(r'^login/$', auth_login, name='login'),
+    url(r'^logout/$', auth_logout, name='logout'),
 
 ]
+
