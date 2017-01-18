@@ -15,9 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.generic import TemplateView
 
 from serveup_membership.views import home, staff_home, auth_login, auth_logout
-from django.views.generic import TemplateView
+from videos.views import video_detail
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -26,6 +27,8 @@ urlpatterns = [
     url(r'^staff/$', staff_home, name='staff'),
     url(r'^login/$', auth_login, name='login'),
     url(r'^logout/$', auth_logout, name='logout'),
+
+    url(r'^videos/(?P<id>\d+)/$', video_detail, name="video_detail"),
 
 ]
 

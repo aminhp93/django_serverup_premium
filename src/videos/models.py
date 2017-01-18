@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 # Create your models here.
 class Video(models.Model):
@@ -7,3 +8,6 @@ class Video(models.Model):
 
 	def __str__(self):
 		return str(self.title)
+
+	def get_absolute_url(self):
+		return reverse("video_detail", kwargs={"id": self.id})
