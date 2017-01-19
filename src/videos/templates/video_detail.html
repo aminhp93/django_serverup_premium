@@ -1,7 +1,10 @@
-{% extends 'base.html' %}
-{% block title %}Detail{% endblock title %}
-
-
-{% block content %}
-{{ obj.embed_code | safe }}
+{% extends 'base.html' %} {% block title %}Detail{% endblock title %} {% block content %} {{ obj.embed_code | safe }}
+<div>
+    <a href="https://twitter.com/home?status={{ obj.get_share_message | safe}}">
+<i class="fa fa-twitter" aria-hidden="true"></i>
+</a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=http://CodingForEntrepreneurs.com/">
+<i class="fa fa-facebook" aria-hidden="true"></i>
+</a>
+</div>
 {% endblock content %}

@@ -1,5 +1,11 @@
-from django.db import models
+from urllib.parse import quote
+
 from django.core.urlresolvers import reverse
+from django.db import models
+from django.db.models.signals import post_save
+from django.utils.text import slugify
+
+from django.conf import settings
 
 # Create your models here.
 
@@ -22,10 +28,15 @@ class VideoManager(models.Manager):
 		return self.get_queryset().active()
 
 
+DEFAULT_MESSAGE = """
+Check me
+"""
+
 class Video(models.Model):
 	title =  models.CharField(max_length=120)
 	embed_code = models.CharField(max_length=500, null=True, blank=True)
 	slug = models.SlugField(null=True, blank=True)
+	share_message = models.TextField(default=DEFAULT_MESSAGE)
 	active = models.BooleanField(default=True)
 	featured = models.BooleanField(default=False)
 	free_preview = models.BooleanField(default=False)
@@ -46,6 +57,24 @@ class Video(models.Model):
 			return reverse("video_detail", kwargs={"slug": self.slug, "cat_slug": self.category.slug})
 		except:
 			return "/"
+
+	def get_share_message(self):
+		full_url = "{}{}".format(settings.FULL_DOMAIN_NAME, self.get_absolute_url())
+		return quote("{}{}".format(self.share_message, full_url))
+
+def video_signal_post_save_receiver(sender, instance, created, *args, **kwargs):
+
+	print("nothing")
+	print(args, kwargs, instance.title, instance.get_absolute_url(), created, sender)
+	print(slugify(instance.title))
+	# if created:
+	# 	try:
+	# 		instance.slug = slugify(instance.title)
+	# 		instance.save()
+	# 	except:
+	# 		instance.slug = None
+
+post_save.connect(video_signal_post_save_receiver, sender=Video)
 
 class Category(models.Model):
 	title = models.CharField(max_length=120)

@@ -22,6 +22,7 @@ def video_detail(request, cat_slug, slug):
 
 	try:
 		obj = Video.objects.get(slug=slug)
+		print(obj.get_share_message())
 		context = {
 			"obj": obj,
 
