@@ -59,6 +59,13 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     {% include 'javascript.html' %}
+
+    <script>
+        $(document).ready(function(){
+            {% block jquery %}
+            {% endblock %}
+        })
+    </script>
 </body>
 
 </html>

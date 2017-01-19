@@ -1,4 +1,34 @@
-{% extends 'base.html' %} {% block title %}Detail{% endblock title %} {% block content %} {{ obj.embed_code | safe }}
+{% extends 'base.html' %} {% block title %}Detail{% endblock title %} 
+<script>
+{% block jquery %}
+	function update_iframe_size(){
+		// $("iframe").css("width", "100%");
+		// $("iframe").css("height", "450px");
+
+		var parent_class = $("iframe").parent().attr("class");
+		var parent_width = $("iframe").parent().width();
+		var width = $("iframe").css("width");
+		var height = $("iframe").css("height");
+		var ratio = parseInt(height)/parseInt(width);
+		var new_height = parseInt(parent_width) * ratio
+
+		$("iframe").css("width", parent_width);
+		$("iframe").css("height", new_height);
+
+	}
+	update_iframe_size()
+	$(window).bind("resize", function(){
+		// alert("resized")
+		update_iframe_size()
+	})
+
+{% endblock %}
+</script>
+{% block content %} 
+<div class="col-sm-8">
+	{{ obj.embed_code | safe }}
+</div>
+
 <div>
     <a href="https://twitter.com/home?status={{ obj.get_share_message | safe}}">
 <i class="fa fa-twitter" aria-hidden="true"></i>
