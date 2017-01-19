@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+	{% for obj in objs %}
+	<div>Category Title: <a href="{% url 'category_detail' cat_slug=obj.slug %}">{{ obj.title }}</a></div>
+	{% endfor %}
+</div>
+{% endblock content %}

@@ -1,25 +1,45 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, Http404
 
-from .models import Video
+from .models import Video, Category
 
 # Create your views here.
-def video_list(request):
-	queryset = Video.objects.all()
+def category_list(request):
+	objs = Category.objects.all()
 
 	context = {
-		"queryset": queryset,
+		"objs": objs,
 
 	}
-	return render(request, "video_list.html", context)
+	return render(request, "category_list.html", context)
 
-def video_detail(request, id):
+@login_required
+def video_detail(request, cat_slug, slug):
 	try:
-		obj = Video.objects.get(id=id)
+		cat = Category.objects.get(slug=cat_slug)
+	except:
+		Http404
+
+	try:
+		obj = Video.objects.get(slug=slug)
 		context = {
 			"obj": obj,
 
 		}
 		return render(request, "video_detail.html", context)
+	except:
+		raise Http404
+
+@login_required
+def category_detail(request, cat_slug):
+	try:
+		obj = Category.objects.get(slug=cat_slug)
+		videos = obj.video_set.all()
+		context = {
+			"obj": obj,
+			"videos": videos,
+		}
+		return render(request, "category_detail.html", context)
 	except:
 		raise Http404
 

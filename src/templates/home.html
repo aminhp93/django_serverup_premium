@@ -14,7 +14,6 @@ h1{
 <div>
 	{% for video in videos %}
 		<div>{{ video.embed_code | safe}}</div>
-		<!-- <div><a href="{% url 'video_detail' id=video.id %}">{{ video.title }}</a></div> -->
 		<div><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></div>
 	{% endfor %}
 </div>

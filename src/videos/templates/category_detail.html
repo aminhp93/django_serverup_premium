@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div>
+	<h1>Category title: {{ obj.title }}</h1>
+	<h3>Video lists:</h3>
+	{% for video in videos %}
+	<div><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></div>
+	{% endfor %}
+</div>
+{% endblock content %}
