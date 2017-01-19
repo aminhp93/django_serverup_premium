@@ -37,7 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
     # internal
+    'accounts',
     'videos',
 
     # external
@@ -133,3 +135,5 @@ STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static", "static_root")
 LOGIN_URL = "/login/"
 
 FULL_DOMAIN_NAME = "https://facebook.com"
+
+AUTH_USER_MODEL = 'accounts.MyUser'
