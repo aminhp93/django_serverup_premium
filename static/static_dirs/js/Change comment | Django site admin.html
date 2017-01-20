@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+
+<html lang="en-us" >
+<head>
+<title>Change comment | Django site admin</title>
+<link rel="stylesheet" type="text/css" href="/static/admin/css/base.css" />
+<link rel="stylesheet" type="text/css" href="/static/admin/css/forms.css" />
+
+
+<script type="text/javascript" src="/admin/jsi18n/"></script>
+<script type="text/javascript" src="/static/admin/js/core.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/jquery/jquery.js"></script>
+<script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
+<script type="text/javascript" src="/static/admin/js/admin/RelatedObjectLookups.js"></script>
+<script type="text/javascript" src="/static/admin/js/actions.js"></script>
+<script type="text/javascript" src="/static/admin/js/urlify.js"></script>
+<script type="text/javascript" src="/static/admin/js/prepopulate.js"></script>
+<script type="text/javascript" src="/static/admin/js/vendor/xregexp/xregexp.js"></script>
+
+<meta name="robots" content="NONE,NOARCHIVE" />
+</head>
+
+
+<body class=" app-comments model-comment change-form"
+  data-admin-utc-offset="0">
+
+<!-- Container -->
+<div id="container">
+
+    
+    <!-- Header -->
+    <div id="header">
+        <div id="branding">
+        
+<h1 id="site-name"><a href="/admin/">Django administration</a></h1>
+
+        </div>
+        
+        
+        <div id="user-tools">
+            
+                Welcome,
+                <strong>amin3</strong>.
+            
+            
+                
+                    <a href="/">View site</a> /
+                
+                
+                    
+                    
+                
+                
+                <a href="/admin/password_change/">Change password</a> /
+                
+                <a href="/admin/logout/">Log out</a>
+            
+        </div>
+        
+        
+        
+    </div>
+    <!-- END Header -->
+    
+<div class="breadcrumbs">
+<a href="/admin/">Home</a>
+&rsaquo; <a href="/admin/comments/">Comments</a>
+&rsaquo; <a href="/admin/comments/comment/">Comments</a>
+&rsaquo; amin3
+</div>
+
+    
+
+    
+        
+    
+
+    <!-- Content -->
+    <div id="content" class="colM">
+        
+        <h1>Change comment</h1>
+        <div id="content-main">
+
+
+  <ul class="object-tools">
+    
+    <li>
+        
+        <a href="/admin/comments/comment/1/history/" class="historylink">History</a>
+    </li>
+    
+    
+  </ul>
+
+
+<form enctype="multipart/form-data" action="" method="post" id="comment_form" novalidate><input type='hidden' name='csrfmiddlewaretoken' value='vsmZ4kLfdqx2490xUZEQw1fLlhXKCHfjHwSafqIxqezTbY190nP6uV1tvy4tw0NT' />
+<div>
+
+
+
+
+
+
+
+  <fieldset class="module aligned ">
+    
+    
+    
+        <div class="form-row field-user">
+            
+            
+                <div>
+                    
+                    
+                        <label class="required" for="id_user">User:</label>
+                        
+                            
+<div class="related-widget-wrapper">
+    <select id="id_user" name="user" required>
+<option value="">---------</option>
+<option value="1">amin1</option>
+<option value="2" selected="selected">amin3</option>
+<option value="3">minh4</option>
+<option value="4">amin5</option>
+<option value="5">amin6</option>
+</select>
+    
+        
+        <a class="related-widget-wrapper-link change-related" id="change_id_user"
+            data-href-template="/admin/accounts/myuser/__fk__/change/?_to_field=id&amp;_popup=1"
+            title="Change selected my user">
+            <img src="/static/admin/img/icon-changelink.svg" alt="Change"/>
+        </a>
+        
+        
+        <a class="related-widget-wrapper-link add-related" id="add_id_user"
+            href="/admin/accounts/myuser/add/?_to_field=id&amp;_popup=1"
+            title="Add another my user">
+            <img src="/static/admin/img/icon-addlink.svg" alt="Add"/>
+        </a>
+        
+        
+    
+</div>
+
+                        
+                    
+                    
+                </div>
+            
+        </div>
+    
+        <div class="form-row field-path">
+            
+            
+                <div>
+                    
+                    
+                        <label class="required" for="id_path">Path:</label>
+                        
+                            <input class="vTextField" id="id_path" maxlength="350" name="path" type="text" value="cat-1" required />
+                        
+                    
+                    
+                </div>
+            
+        </div>
+    
+        <div class="form-row field-video">
+            
+            
+                <div>
+                    
+                    
+                        <label for="id_video">Video:</label>
+                        
+                            
+<div class="related-widget-wrapper">
+    <select id="id_video" name="video">
+<option value="">---------</option>
+<option value="1">title1</option>
+<option value="2">video2</option>
+<option value="3">title3</option>
+<option value="4" selected="selected">title4</option>
+<option value="5">video here</option>
+</select>
+    
+        
+        <a class="related-widget-wrapper-link change-related" id="change_id_video"
+            data-href-template="/admin/videos/video/__fk__/change/?_to_field=id&amp;_popup=1"
+            title="Change selected video">
+            <img src="/static/admin/img/icon-changelink.svg" alt="Change"/>
+        </a>
+        
+        
+        <a class="related-widget-wrapper-link add-related" id="add_id_video"
+            href="/admin/videos/video/add/?_to_field=id&amp;_popup=1"
+            title="Add another video">
+            <img src="/static/admin/img/icon-addlink.svg" alt="Add"/>
+        </a>
+        
+        
+    
+</div>
+
+                        
+                    
+                    
+                </div>
+            
+        </div>
+    
+        <div class="form-row field-text">
+            
+            
+                <div>
+                    
+                    
+                        <label class="required" for="id_text">Text:</label>
+                        
+                            <textarea class="vLargeTextField" cols="40" id="id_text" name="text" rows="10" required>
+the text</textarea>
+                        
+                    
+                    
+                </div>
+            
+        </div>
+    
+        <div class="form-row field-active">
+            
+            
+                <div class="checkbox-row">
+                    
+                    
+                        <input checked="checked" id="id_active" name="active" type="checkbox" /><label class="vCheckboxLabel" for="id_active">Active</label>
+                    
+                    
+                </div>
+            
+        </div>
+    
+</fieldset>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div class="submit-row">
+<input type="submit" value="Save" class="default" name="_save" />
+
+    
+    <p class="deletelink-box"><a href="/admin/comments/comment/1/delete/" class="deletelink">Delete</a></p>
+
+
+<input type="submit" value="Save and add another" name="_addanother" />
+<input type="submit" value="Save and continue editing" name="_continue" />
+</div>
+
+
+
+    <script type="text/javascript"
+            id="django-admin-form-add-constants"
+            src="/static/admin/js/change_form.js"
+            >
+    </script>
+
+
+
+
+<script type="text/javascript"
+        id="django-admin-prepopulated-fields-constants"
+        src="/static/admin/js/prepopulate_init.js"
+        data-prepopulated-fields="[]">
+</script>
+
+
+</div>
+</form></div>
+
+        
+        <br class="clear" />
+    </div>
+    <!-- END Content -->
+
+    <div id="footer"></div>
+</div>
+<!-- END Container -->
+
+</body>
+</html>

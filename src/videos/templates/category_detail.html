@@ -8,5 +8,9 @@
 	{% for video in videos %}
 	<div><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></div>
 	{% endfor %}
+	
+	{% for comment in comments %}
+	<div>{{ comment }}</div>
+	{% endfor %}
 </div>
 {% endblock content %}

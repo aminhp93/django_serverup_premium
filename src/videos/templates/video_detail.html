@@ -36,5 +36,23 @@
 <a href="https://www.facebook.com/sharer/sharer.php?u=http://CodingForEntrepreneurs.com/">
 <i class="fa fa-facebook" aria-hidden="true"></i>
 </a>
+
+<br>
+<hr>
+<div class="row">
+	<h1>Comments/Questions:</h1>
+	<form action="" method="POST">
+		{% csrf_token %}
+		{{ form.as_p }}
+		<input type="submit" value="Add comment">
+	</form>
+	<div class="col-sm-12">
+		{% for comment in comments %}
+			<div>{{ comment.text }}</div>
+		{% endfor %}
+		
+	</div>
+		
+</div>
 </div>
 {% endblock content %}
