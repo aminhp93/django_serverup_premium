@@ -1,9 +1,15 @@
-{% extends 'base.html' %} {% block title %}Detail{% endblock title %} 
+{% extends 'base.html' %} 
+{% load crispy_forms_tags %}
+
+{% block title %}Detail{% endblock title %} 
 <script>
 {% block style %}
 .reply_comment{
 	display: none;
 }
+// .form-group > .control-label{
+// 	display: none
+// }
 {% endblock %}
 {% block jquery %}
 	function update_iframe_size(){
@@ -51,10 +57,13 @@
 <hr>
 <div class="row">
 	<h1>Comments/Questions:</h1>
-	<form action="" method="POST">
+	<form action="{% url 'comment_create' %}" method="POST">
 		{% csrf_token %}
-		{{ form.as_p }}
-		<input type="submit" value="Add comment" class="btn btn-default">
+		<!-- {{ form | crispy }} -->
+		{% crispy form form.helper %}
+		<input type="hidden" name="video_id" value="{{ obj.id }}">
+		<input type="hidden" name="origin_path" value="{{ request.get_full_path }}">
+		<!-- <input type="submit" value="Add comment" class="btn btn-default"> -->
 	</form>
 	<table class="table">
 		<tr>
@@ -84,11 +93,12 @@
 			</ul>
 			{% endif %}
 			
-				<a href="#" class="reply_btn">Reply</a> | 
-				<a href="{{ comment.get_absolute_url }}">View thread</a>
+				<a href="{{ comment.get_absolute_url }}">View thread</a> | <a href="#" class="reply_btn">Reply</a> 
 				<div class="reply_comment">
 					<form action="{% url 'comment_create' %}" method="POST">
-						{% csrf_token %}{{ form.as_p }}
+						{% csrf_token %}{% crispy form form.helper %}
+						<input type="hidden" name="video_id" value="{% url 'comment_create' %}">
+						<input type="hidden" name="origin_path" value="{{ comment.get_origin }}">
 						<input type="hidden" name="parent_id" value="{{ comment.id }}">
 						<input type="submit" value="Reply to comment" class="btn btn-default">
 					</form>

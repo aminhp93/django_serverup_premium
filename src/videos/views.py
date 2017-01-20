@@ -35,24 +35,24 @@ def video_detail(request, cat_slug, slug):
 			"form": form,
 		}
 
-		if form.is_valid():
-			parent_id = request.POST.get('parent_id')
-			parent_comment = None
-			if parent_id is not None:
-				try:
-					parent_comment = Comment.objects.get(id=parent_id)
-				except:
-					parent_comment = None
+		# if form.is_valid():
+		# 	parent_id = request.POST.get('parent_id')
+		# 	parent_comment = None
+		# 	if parent_id is not None:
+		# 		try:
+		# 			parent_comment = Comment.objects.get(id=parent_id)
+		# 		except:
+		# 			parent_comment = None
 
-			comment_text = form.cleaned_data["comment"]
-			new_comment = Comment.objects.create_comment(
-				user = request.user,
-				path = request.get_full_path(),
-				text = comment_text,
-				video = obj,
-				parent = parent_comment,
-				)
-			return HttpResponseRedirect(obj.get_absolute_url())
+		# 	comment_text = form.cleaned_data["comment"]
+		# 	new_comment = Comment.objects.create_comment(
+		# 		user = request.user,
+		# 		path = request.get_full_path(),
+		# 		text = comment_text,
+		# 		video = obj,
+		# 		parent = parent_comment,
+		# 		)
+		# 	return HttpResponseRedirect(obj.get_absolute_url())
 
 
 			# obj_instance = form.save(commit=False)
