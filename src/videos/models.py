@@ -92,7 +92,7 @@ class Category(models.Model):
 
 	def get_absolute_url(self):
 		try:
-			return reverse("category_detail", kwargs={"cat_slug": self.category.slug})
+			return reverse("project_detail", kwargs={"cat_slug": self.slug})
 		except:
 			return "/"
 

@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     
     # internal
     'accounts',
+    'comments',
     'videos',
 
     # external
