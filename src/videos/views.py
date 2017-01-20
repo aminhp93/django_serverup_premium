@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, Http404
+from django.shortcuts import render, Http404, HttpResponseRedirect
 
 from .models import Video, Category
 from comments.models import Comment
@@ -26,9 +26,7 @@ def video_detail(request, cat_slug, slug):
 
 	try:
 		obj = Video.objects.get(slug=slug)
-		print(obj)
 		comments = obj.comment_set.all()
-		print(comments)
 		form = CommentForm(request.POST or None)
 
 		context = {
@@ -38,13 +36,22 @@ def video_detail(request, cat_slug, slug):
 		}
 
 		if form.is_valid():
-			obj_instance = form.save(commit=False)
-			print(obj_instance, "fasd")
-			obj_instance.path = request.get_full_path()
-			obj_instance.user = request.user
-			obj_instance.video = obj
-			obj_instance.save()
-			print("d")
+			comment_text = form.cleaned_data["comment"]
+			new_comment = Comment.objects.create_comment(
+				user = request.user,
+				path = request.get_full_path(),
+				text = comment_text,
+				video = obj,
+				)
+			print(new_comment.text)
+			return HttpResponseRedirect(obj.get_absolute_url())
+
+
+			# obj_instance = form.save(commit=False)
+			# obj_instance.path = request.get_full_path()
+			# obj_instance.user = request.user
+			# obj_instance.video = obj
+			# obj_instance.save()
 
 		return render(request, "video_detail.html", context)
 	except:

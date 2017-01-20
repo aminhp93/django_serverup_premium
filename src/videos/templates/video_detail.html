@@ -44,14 +44,37 @@
 	<form action="" method="POST">
 		{% csrf_token %}
 		{{ form.as_p }}
-		<input type="submit" value="Add comment">
+		<input type="submit" value="Add comment" class="btn btn-default">
 	</form>
-	<div class="col-sm-12">
+	<table class="table">
+		<tr>
+			<th>Text</th>
+			<!-- <th>is_child</th>
+			<th>get_children</th> -->
+		</tr>
+		<!-- {% for comment in comments %}
+		<tr>
+			<td>{{ comment.text }} </td>
+			<td>{{ comment.is_child }}</td>
+			<td>{{ comment.get_children }}</td>
+		</tr>
+		{% endfor %} -->
 		{% for comment in comments %}
-			<div>{{ comment.text }}</div>
+		<tr>
+			<td>{{ comment.text }}
+			<br><small>via {{ comment.user }} | {{ comment.timestamp | timesince}}</small>
+			{% if not comment.is_child %}
+			<ul>
+				{% for child in comment.get_children %}
+				<li>{{ child.text }}<small> via {{ child.user }}</small></li>
+				{% endfor %}
+			</ul>
+			{% endif %}
+			</td>
+
+		</tr>
 		{% endfor %}
-		
-	</div>
+	</table>
 		
 </div>
 </div>
