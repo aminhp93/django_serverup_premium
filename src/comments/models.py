@@ -1,14 +1,15 @@
 from django.db import models
+from django.core.urlresolvers import reverse
 
 from accounts.models import MyUser
 from videos.models import Video
 
 # Create your models here.
 class CommentManager(models.Manager):
-	# def all(self):
-		# return super().filter(active=True).filter(parent=None)
+	def all(self):
+		return super().filter(active=True).filter(parent=None)
 
-	def create_comment(self, user=None, text=None, path=None, video=None):
+	def create_comment(self, user=None, text=None, path=None, video=None, parent=None):
 		if not path:
 			raise ValueError("Must include path when adding comment")
 
@@ -23,6 +24,8 @@ class CommentManager(models.Manager):
 
 		if video is not None:
 			comment.video = video
+		if parent is not None:
+			comment.parent = parent
 		comment.save(using=self._db)
 		return comment
 
@@ -44,6 +47,13 @@ class Comment(models.Model):
 	def __str__(self):
 		return self.text
 
+	def get_absolute_url(self):
+		return reverse("comment_thread", kwargs={"id": self.id})
+
+	@property
+	def get_origin(self):
+		return self.path
+
 	@property
 	def get_comment(self):
 		return self.text
@@ -59,10 +69,8 @@ class Comment(models.Model):
 			return None
 		else:
 			child_comments = Comment.objects.filter(parent=self)
-			return child_comments 
+			return child_comments
 
-
-
-
-
+	
+	
 

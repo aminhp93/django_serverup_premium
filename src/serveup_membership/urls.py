@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 from serveup_membership.views import home, staff_home
 from accounts.views import auth_login, auth_logout
 from videos.views import video_detail, category_list, category_detail
+from comments.views import comment_thread, comment_create
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -32,8 +33,10 @@ urlpatterns = [
     # url(r'^projects/(?P<id>\d+)/$', video_detail, name="video_detail"),
     url(r'^projects/(?P<cat_slug>[\w-]+)/$', category_detail, name="project_detail"),
     url(r'^projects/(?P<cat_slug>[\w-]+)/(?P<slug>[\w-]+)/$', video_detail, name="video_detail"),
-    
+    url(r'^comment/(?P<id>\d+)$', comment_thread, name="comment_thread"),
+    url(r'^comment/create$', comment_create, name="comment_create"),
 
 
 ]
 
+    

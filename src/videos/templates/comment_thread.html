@@ -1,0 +1,25 @@
+{% extends "base.html" %} {% block content %}
+<a href="{{ comment.get_origin }}">Go back</a>
+<table class="table">
+    <tr>
+        <td>{{ comment.text }}
+            <br><small>via {{ comment.user }} | {{ comment.timestamp | timesince}}</small> {% if not comment.is_child %}
+            <ul>
+                {% for child in comment.get_children %}
+                <li>
+                    {{ child.text }}<small> via {{ child.user }}</small>
+                </li>
+                {% endfor %}
+            </ul>
+            {% endif %}
+            <div class="reply_comment">
+                <form action="{% url 'comment_create' %}" method="POST">
+                    {% csrf_token %}{{ form.as_p }}
+                    <input type="hidden" name="parent_id" value="{{ comment.id }}">
+                    <input type="submit" value="Reply to comment" class="btn btn-default">
+                </form>
+            </div>
+        </td>
+    </tr>
+</table>
+{% endblock %}

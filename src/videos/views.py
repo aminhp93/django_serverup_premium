@@ -20,7 +20,7 @@ def video_detail(request, cat_slug, slug):
 	# comments = Comment.objects.filter(path=path)
 	try:
 		cat = Category.objects.get(slug=cat_slug)
-		print("test")
+		
 	except:
 		raise Http404
 
@@ -36,14 +36,22 @@ def video_detail(request, cat_slug, slug):
 		}
 
 		if form.is_valid():
+			parent_id = request.POST.get('parent_id')
+			parent_comment = None
+			if parent_id is not None:
+				try:
+					parent_comment = Comment.objects.get(id=parent_id)
+				except:
+					parent_comment = None
+
 			comment_text = form.cleaned_data["comment"]
 			new_comment = Comment.objects.create_comment(
 				user = request.user,
 				path = request.get_full_path(),
 				text = comment_text,
 				video = obj,
+				parent = parent_comment,
 				)
-			print(new_comment.text)
 			return HttpResponseRedirect(obj.get_absolute_url())
 
 

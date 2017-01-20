@@ -1,5 +1,10 @@
 {% extends 'base.html' %} {% block title %}Detail{% endblock title %} 
 <script>
+{% block style %}
+.reply_comment{
+	display: none;
+}
+{% endblock %}
 {% block jquery %}
 	function update_iframe_size(){
 		// $("iframe").css("width", "100%");
@@ -20,6 +25,11 @@
 	$(window).bind("resize", function(){
 		// alert("resized")
 		update_iframe_size()
+	})
+
+	$('.reply_btn').click(function(e){
+		e.preventDefault();
+		$(this).next('.reply_comment').fadeToggle();
 	})
 
 {% endblock %}
@@ -66,10 +76,25 @@
 			{% if not comment.is_child %}
 			<ul>
 				{% for child in comment.get_children %}
-				<li>{{ child.text }}<small> via {{ child.user }}</small></li>
+				<li>
+					{{ child.text }}<small> via {{ child.user }}</small>
+				</li>
 				{% endfor %}
+				
 			</ul>
 			{% endif %}
+			
+				<a href="#" class="reply_btn">Reply</a> | 
+				<a href="{{ comment.get_absolute_url }}">View thread</a>
+				<div class="reply_comment">
+					<form action="{% url 'comment_create' %}" method="POST">
+						{% csrf_token %}{{ form.as_p }}
+						<input type="hidden" name="parent_id" value="{{ comment.id }}">
+						<input type="submit" value="Reply to comment" class="btn btn-default">
+					</form>
+				</div>
+				
+				
 			</td>
 
 		</tr>
