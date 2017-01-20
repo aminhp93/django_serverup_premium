@@ -11,6 +11,11 @@ h1{
 </style>
 
 {% block content %}
+<form action="" method="POST">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Register" class="btn btn-default">
+</form>
 <h1>Hello. We have {{ number }} embeded videos</h1>
 
 <div>

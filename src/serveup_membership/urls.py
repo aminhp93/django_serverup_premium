@@ -17,7 +17,8 @@ from django.conf.urls import url
 from django.contrib import admin
 from django.views.generic import TemplateView
 
-from serveup_membership.views import home, staff_home, auth_login, auth_logout
+from serveup_membership.views import home, staff_home
+from accounts.views import auth_login, auth_logout
 from videos.views import video_detail, category_list, category_detail
 
 urlpatterns = [
@@ -27,9 +28,9 @@ urlpatterns = [
     url(r'^staff/$', staff_home, name='staff'),
     url(r'^login/$', auth_login, name='login'),
     url(r'^logout/$', auth_logout, name='logout'),
-    url(r'^projects/$', category_list, name='category_list'),
+    url(r'^projects/$', category_list, name='projects'),
     # url(r'^projects/(?P<id>\d+)/$', video_detail, name="video_detail"),
-    url(r'^projects/(?P<cat_slug>[\w-]+)/$', category_detail, name="category_detail"),
+    url(r'^projects/(?P<cat_slug>[\w-]+)/$', category_detail, name="project_detail"),
     url(r'^projects/(?P<cat_slug>[\w-]+)/(?P<slug>[\w-]+)/$', video_detail, name="video_detail"),
     
 
