@@ -2,6 +2,8 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, Http404, HttpResponseRedirect
 
+from notifications.signals import notify
+
 from videos.models import Video
 
 from .models import Comment
@@ -53,6 +55,7 @@ def comment_create(request):
 					video = video,
 					parent = parent_comment,
 					)
+				notify.send(request.user, recipient=parent_comment.user, action="responed to user")
 				messages.success(request, "Thank", extra_tags='alert-warning')
 				return HttpResponseRedirect(parent_comment.get_absolute_url())
 			else:
@@ -62,6 +65,7 @@ def comment_create(request):
 					text = comment_text,
 					video = video,
 					)
+				notify.send(request.user, recipient=request.user, action="new comment added")
 				messages.success(request, "Thank")
 				return HttpResponseRedirect(new_comment.get_absolute_url())
 		else:

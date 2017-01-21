@@ -59,11 +59,11 @@
 	<h1>Comments/Questions:</h1>
 	<form action="{% url 'comment_create' %}" method="POST">
 		{% csrf_token %}
-		<!-- {{ form | crispy }} -->
-		{% crispy form form.helper %}
+		{{ form | crispy }}
+		<!-- {% crispy form form.helper %} -->
 		<input type="hidden" name="video_id" value="{{ obj.id }}">
 		<input type="hidden" name="origin_path" value="{{ request.get_full_path }}">
-		<!-- <input type="submit" value="Add comment" class="btn btn-default"> -->
+		<input type="submit" value="Add comment" class="btn btn-default">
 	</form>
 	<table class="table">
 		<tr>
@@ -96,7 +96,9 @@
 				<a href="{{ comment.get_absolute_url }}">View thread</a> | <a href="#" class="reply_btn">Reply</a> 
 				<div class="reply_comment">
 					<form action="{% url 'comment_create' %}" method="POST">
-						{% csrf_token %}{% crispy form form.helper %}
+						{% csrf_token %}
+						<!-- {% crispy form form.helper %} -->
+						{{ form | crispy }}
 						<input type="hidden" name="video_id" value="{% url 'comment_create' %}">
 						<input type="hidden" name="origin_path" value="{{ comment.get_origin }}">
 						<input type="hidden" name="parent_id" value="{{ comment.id }}">

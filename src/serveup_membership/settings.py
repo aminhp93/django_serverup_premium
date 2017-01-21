@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # app
     'accounts',
     'comments',
+    'notifications',
     'videos',
 
     # third_party
