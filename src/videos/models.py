@@ -96,10 +96,24 @@ class Category(models.Model):
 		except:
 			return "/"
 
+TAG_CHOICES = (
+	("python", "python"),
+	("django", "django"),
+)
+	
+from django.contrib.contenttypes.fields import GenericForeignKey
+from django.contrib.contenttypes.models import ContentType
 
+class TaggedItem(models.Model):
+	# category = models.ForeignKey(Category, null=True)
+	# video = models.ForeignKey(Video)
+	tag = models.SlugField(choices=TAG_CHOICES)
+	content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE)
+	object_id = models.PositiveIntegerField()
+	content_object = GenericForeignKey('content_type', 'object_id')
 
-
-
+	def __str__(self):              # __unicode__ on Python 2
+		return self.tag
 
 
 

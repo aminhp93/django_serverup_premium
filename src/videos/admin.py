@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Video, Category
+from .models import Video, Category, TaggedItem
 # Register your models here.
 
 class VideoAdmin(admin.ModelAdmin):
@@ -11,3 +11,4 @@ class VideoAdmin(admin.ModelAdmin):
 
 admin.site.register(Video, VideoAdmin)
 admin.site.register(Category)
+admin.site.register(TaggedItem)
