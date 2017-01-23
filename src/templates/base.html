@@ -43,7 +43,6 @@
 <body>
     {% include 'navbar.html' %}
     <div class="container">
-        <h3>Notifications</h3>
         <div id="notificationLoader">
             
         </div>
@@ -82,13 +81,28 @@
                 csrfmiddlewaretoken: "{{ csrf_token }}",
             },
             success: function(data) {
-                $("#notificationLoader").html("");
-                var count = data.count;
-                console.log(count);
+                $("#notificationLoader").html("<h3>Notifications</h3>");
+                var count = data.notifications.length;
+                console.log(count, "count");
 
-                $(data.notifications).each(function(){
-                    $("#notificationLoader").append(this + "<br>");
-                })
+                if (count == 0){
+                    $("#notification_dropdown").append("<li>No notification</li>");
+
+                } else {
+                    $(data.notifications).each(function(){
+                        var link = this;
+                        $("#notification_dropdown").append("<li>" + link + "</li>");
+                        // if ($(this).attr("href") == null){
+                        //     var url = "{% url 'notifications_all' %}";
+                        //     var new_link = "<a href='" + url + "'>" + link + "</a>";
+                        //     $("#notification_dropdown").append("<li>" + new_link + "</li>");
+                        // } else {
+                            // $("#notification_dropdown").append("<li>" + link + "</li>");
+                        // }
+                        
+                    })
+                }
+              
                 console.log(data.notifications)
             },
             error: function(response, e) {

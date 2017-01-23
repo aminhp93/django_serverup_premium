@@ -89,19 +89,34 @@ class Notification(models.Model):
 		f = reverse("notifications_read", kwargs={"id": self.id})
 		
 		if self.target_content_object:
-			print("1")
 			if self.action_content_object and target_url:
-				print("2")
 				return "{a} {b} <a href='{f}?next={e}'>{d}</a> {c}".format(a=a, b=b, c=c, d=d, e=e, f=f)
 			if self.action_content_object and not target_url:
-				print("3")
 				return "{a} {b} {c} {d}".format(a=a, b=b, c=c, d=d)
 			return "{a} {b} {d}".format(a=a, b=b, d=d)
 		return "{a} {b}".format(a=a, b=b)
 
+	@property
+	def get_links(self):
+		try:
+			target_url = self.target_content_object.get_absolute_url()
+		except:
+			target_url = reverse("notifications_all")
+
+		sender = self.sender_content_object
+		verb = self.verb
+		action = self.action_content_object
+		target = self.target_content_object
+		target_url = target_url
+		verify_read = reverse("notifications_read", kwargs={"id": self.id})
+		
+		if self.target_content_object:	
+			return "<a href='{verify_read}?next={target_url}'>{sender} {verb} {target}</a>".format(sender=sender, verb=verb, action=action, target=target, target_url=target_url, verify_read=verify_read)
+		else:
+			return "<a href='{verify_read}?next={target_url}'>{sender}</a>".format(sender=sender, verb=verb, action=action, target=target, target_url=target_url, verify_read=verify_read)
+
+
 def new_notification(sender, **kwargs):
-	print(sender)
-	print(kwargs)
 	kwargs.pop("signal", None)
 	recipient = kwargs.pop("recipient", None)
 	verb = kwargs.pop("verb", None)

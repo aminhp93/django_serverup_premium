@@ -43,7 +43,7 @@ def get_notifications_ajax(request):
 		count = notifications.count()
 
 		for note in notifications:
-			notes.append(str(note))
+			notes.append(str(note.get_links))
 		data = {
 			# "item1": "item 1",
 			# "item2": True,
