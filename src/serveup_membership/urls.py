@@ -21,7 +21,7 @@ from serveup_membership.views import home, staff_home
 from accounts.views import auth_login, auth_logout
 from videos.views import video_detail, category_list, category_detail
 from comments.views import comment_thread, comment_create
-from notifications.views import all, read
+from notifications.views import all, read, get_notifications_ajax
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -45,7 +45,8 @@ urlpatterns += [
 ]
 # Notifications
 urlpatterns += [
-    url(r'^notifications/', all, name="notifications_all"),
+    url(r'^notifications/$', all, name="notifications_all"),
+    url(r'^notifications/ajax/$', get_notifications_ajax, name="notifications_ajax"),
     url(r'^notifications/read/(?P<id>\d+)/$', read, name="notifications_read"),
     
 ]

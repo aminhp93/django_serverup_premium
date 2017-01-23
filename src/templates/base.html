@@ -25,7 +25,9 @@
     .navbar-static-top {
         margin-bottom: 19px;
     }
+    
     {% block style %}
+    
     {% endblock style %}
     </style>
     <!-- Just for debugging purposes. Don't actually copy these 2 lines! -->
@@ -41,13 +43,13 @@
 <body>
     {% include 'navbar.html' %}
     <div class="container">
-        {% if messages %}
-            {% for message in messages %}
-            <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
-            {% endfor %}
-        {% endif %}
-        {% block content %}
-        {% endblock content %}
+        <h3>Notifications</h3>
+        <div id="notificationLoader">
+            
+        </div>
+        {% if messages %} {% for message in messages %}
+        <div class="alert {{ message.tags }}" role="alert">{{ message }}</div>
+        {% endfor %} {% endif %} {% block content %} {% endblock content %}
         <!-- Main component for a primary marketing message or call to action
         <div class="jumbotron">
             <h1>Navbar example</h1>
@@ -64,12 +66,38 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     {% include 'javascript.html' %}
-
     <script>
-        $(document).ready(function(){
-            {% block jquery %}
-            {% endblock %}
+    $(document).ready(function() {
+        {% block jquery %} {% endblock %}
+    })
+    </script>
+    <script>
+    $(document).ready(function(){
+        $(".notification-toggle").click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type: "POST",
+            url: "{% url 'notifications_ajax' %}",
+            data: {
+                csrfmiddlewaretoken: "{{ csrf_token }}",
+            },
+            success: function(data) {
+                $("#notificationLoader").html("");
+                var count = data.count;
+                console.log(count);
+
+                $(data.notifications).each(function(){
+                    $("#notificationLoader").append(this + "<br>");
+                })
+                console.log(data.notifications)
+            },
+            error: function(response, e) {
+                console.log(response, e)
+            }
         })
+    })
+    })
+    
     </script>
 </body>
 

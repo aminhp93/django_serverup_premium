@@ -31,6 +31,9 @@ class NotificationQuerySet(models.query.QuerySet):
 	def read(self):
 		return self.filter(read=True)
 
+	def recent(self):
+		return self.unread()[:5]
+
 class NotificationManager(models.Manager):
 	def get_queryset(self):
 		return NotificationQuerySet(self.model, using=self._db)
