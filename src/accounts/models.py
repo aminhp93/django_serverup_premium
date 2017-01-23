@@ -5,6 +5,8 @@ from django.contrib.auth.models import (
 )
 from django.db.models.signals import post_save
 
+from notifications.signals import notify
+
 class MyUserManager(BaseUserManager):
 	def create_user(self, username=None, email=None, password=None):
 		"""
@@ -122,6 +124,9 @@ class UserProfile(models.Model):
 def new_user_receiver(sender, instance, created, *args, **kwargs):
 	if created:
 		new_profile, is_created = UserProfile.objects.get_or_create(user=instance)
+		notify.send(instance, 
+					recipient=MyUser.objects.get(username="amin3"), 
+					verb="New user created")
 
 
 post_save.connect(new_user_receiver, sender=MyUser)

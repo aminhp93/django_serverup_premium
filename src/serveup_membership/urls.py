@@ -21,22 +21,32 @@ from serveup_membership.views import home, staff_home
 from accounts.views import auth_login, auth_logout
 from videos.views import video_detail, category_list, category_detail
 from comments.views import comment_thread, comment_create
+from notifications.views import all, read
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', home, name='home'),
     # url(r'', TemplateView.as_view(template_name='base.html'), name='home')
     url(r'^staff/$', staff_home, name='staff'),
-    url(r'^login/$', auth_login, name='login'),
-    url(r'^logout/$', auth_logout, name='logout'),
     url(r'^projects/$', category_list, name='projects'),
     # url(r'^projects/(?P<id>\d+)/$', video_detail, name="video_detail"),
     url(r'^projects/(?P<cat_slug>[\w-]+)/$', category_detail, name="project_detail"),
     url(r'^projects/(?P<cat_slug>[\w-]+)/(?P<slug>[\w-]+)/$', video_detail, name="video_detail"),
+]
+# auth login/logout
+urlpatterns += [
+    url(r'^login/$', auth_login, name='login'),
+    url(r'^logout/$', auth_logout, name='logout'),
+]
+# Comment Thread
+urlpatterns += [
     url(r'^comment/(?P<id>\d+)$', comment_thread, name="comment_thread"),
     url(r'^comment/create$', comment_create, name="comment_create"),
-
-
 ]
-
+# Notifications
+urlpatterns += [
+    url(r'^notifications/', all, name="notifications_all"),
+    url(r'^notifications/read/(?P<id>\d+)/$', read, name="notifications_read"),
+    
+]
     
