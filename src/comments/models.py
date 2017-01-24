@@ -71,6 +71,19 @@ class Comment(models.Model):
 			child_comments = Comment.objects.filter(parent=self)
 			return child_comments
 
+	def get_affected_user(self):
+		comment_children = self.get_children()
+		if comment_children is not None:
+			users = []
+			for comment in comment_children:
+				if comment.user in users:
+					pass
+				else:
+					users.append(comment.user)
+			return users
+		return None
+
+
 	
 	
 

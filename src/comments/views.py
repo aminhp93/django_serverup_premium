@@ -55,11 +55,14 @@ def comment_create(request):
 					video = video,
 					parent = parent_comment,
 					)
+				affected_users = parent_comment.get_affected_user()
 				notify.send(request.user, 
 					recipient=parent_comment.user, 
 					verb="responed to user", 
 					target=parent_comment, 
-					action=new_comment)
+					action=new_comment,
+					affected_users = affected_users,
+					)
 				messages.success(request, "Thank", extra_tags='alert-warning')
 				return HttpResponseRedirect(parent_comment.get_absolute_url())
 			else:
@@ -69,11 +72,13 @@ def comment_create(request):
 					text = comment_text,
 					video = video,
 					)
-				notify.send(request.user, 
-					recipient=request.user, 
-					verb="new comment added", 
-					target=new_comment.video, 
-					action=new_comment)
+				# OPTION TO SEND TO SUPERUSER OR STAFFUSER
+				# notify.send(request.user, 
+				# 	recipient=request.user, 
+				# 	verb="new comment added", 
+				# 	target=new_comment.video, 
+				# 	action=new_comment
+				# 	)
 				messages.success(request, "Thank")
 				return HttpResponseRedirect(new_comment.get_absolute_url())
 		else:

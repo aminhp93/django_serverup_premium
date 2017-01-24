@@ -59,6 +59,7 @@
             </p>
         </div>
          -->
+    
     </div>
     <!-- /container -->
     <!-- Bootstrap core JavaScript
@@ -86,7 +87,8 @@
                 console.log(count, "count");
 
                 if (count == 0){
-                    $("#notification_dropdown").append("<li>No notification</li>");
+                    var url = "{% url 'notifications_all' %}"
+                    $("#notification_dropdown").append("<li><a href='" + url + "'>View all notifications</a></li>");
 
                 } else {
                     $(data.notifications).each(function(){
