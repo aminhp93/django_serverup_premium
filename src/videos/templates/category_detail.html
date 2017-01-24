@@ -6,7 +6,11 @@
 	<h1>Category title: {{ obj.title }}</h1>
 	<h3>Video lists:</h3>
 	{% for video in videos %}
-	<div><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></div>
+	<div>
+		<a href="{{ video.get_absolute_url }}">{{ video.order }} - {{ video.title }}</a>
+		<div>{{ video.get_previous_url }}</div>
+		<div>{{ video.get_next_url }}</div>
+	</div>
 	{% endfor %}
 	
 	{% for comment in comments %}

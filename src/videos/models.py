@@ -8,6 +8,21 @@ from django.utils.text import slugify
 from django.conf import settings
 
 # Create your models here.
+def get_vid_for_direction(instance, direction):
+	category = instance.category
+	video_qs = category.video_set.all()
+	if direction == "next":
+		new_qs = video_qs.filter(order__gt=instance.order)
+	else:
+		new_qs = video_qs.filter(order__lt=instance.order).reverse()
+	next_vid = None
+	if len(new_qs) >= 1:
+		try:
+			next_vid = new_qs[0]
+		except IndexError:
+			next_vid = None
+	return next_vid
+
 
 class VideoQueryset(models.query.QuerySet):
 	def active(self):
@@ -28,7 +43,7 @@ class VideoManager(models.Manager):
 		return self.get_queryset().active().featured()
 
 	def all(self):
-		return self.get_queryset().active().has_embed()
+		return self.get_queryset().active().has_embed().order_by("-order")
 
 
 DEFAULT_MESSAGE = """
@@ -39,6 +54,7 @@ class Video(models.Model):
 	title =  models.CharField(max_length=120)
 	embed_code = models.CharField(max_length=500, null=True, blank=True)
 	slug = models.SlugField(null=True, blank=True)
+	order = models.PositiveIntegerField(default=1)
 	share_message = models.TextField(default=DEFAULT_MESSAGE)
 	active = models.BooleanField(default=True)
 	featured = models.BooleanField(default=False)
@@ -65,6 +81,18 @@ class Video(models.Model):
 		full_url = "{}{}".format(settings.FULL_DOMAIN_NAME, self.get_absolute_url())
 		return quote("{}{}".format(self.share_message, full_url))
 
+	def get_next_url(self):
+		video = get_vid_for_direction(self, "next")
+		if video is not None:
+			return video.get_absolute_url()
+		return None
+
+	def get_previous_url(self):
+		video = get_vid_for_direction(self, "previous")
+		if video is not None:
+			return video.get_absolute_url()
+		return None
+
 def video_signal_post_save_receiver(sender, instance, created, *args, **kwargs):
 
 	print("nothing")
@@ -79,6 +107,29 @@ def video_signal_post_save_receiver(sender, instance, created, *args, **kwargs):
 
 post_save.connect(video_signal_post_save_receiver, sender=Video)
 
+
+
+class CategoryQueryset(models.query.QuerySet):
+	def active(self):
+		return self.filter(active=True)
+
+	def featured(self):
+		return self.filter(featured=True)
+
+	def has_embed(self):
+		return self.filter(embed_code__isnull=False).exclude(embed_code__iexact="")
+
+class CategoryManager(models.Manager):
+	def get_queryset(self):
+		return CategoryQueryset(self.model, using=self._db)
+
+	def get_featured(self):
+		# return super().filter(featured=True)
+		return self.get_queryset().active().featured()
+
+	def all(self):
+		return self.get_queryset().active()
+
 class Category(models.Model):
 	title = models.CharField(max_length=120)
 	# videos = models.ManyToManyField(Video, null=True, blank=True)
@@ -89,6 +140,11 @@ class Category(models.Model):
 	featured = models.BooleanField(default=False)
 	timestamp = models.DateTimeField(auto_now_add=True, auto_now=False)
 	updated = models.DateTimeField(auto_now_add=False, auto_now=True)
+
+	objects = CategoryManager()
+
+	class Meta:
+		ordering = ["title", "timestamp"]
 
 	def __str__(self):
 		return str(self.title)
@@ -120,14 +176,6 @@ class TaggedItem(models.Model):
 
 	def __str__(self):              # __unicode__ on Python 2
 		return self.tag
-
-
-
-
-
-
-
-
 
 
 
