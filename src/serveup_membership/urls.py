@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from serveup_membership.views import home, staff_home
-from accounts.views import auth_login, auth_logout
+from accounts.views import auth_login, auth_logout, auth_register
 from videos.views import video_detail, category_list, category_detail
 from comments.views import comment_thread, comment_create
 from notifications.views import all, read, get_notifications_ajax
@@ -39,6 +39,7 @@ urlpatterns = [
 urlpatterns += [
     url(r'^login/$', auth_login, name='login'),
     url(r'^logout/$', auth_logout, name='logout'),
+    url(r'^register/$', auth_register, name='register'),
 ]
 # Comment Thread
 urlpatterns += [

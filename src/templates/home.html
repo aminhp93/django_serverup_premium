@@ -1,29 +1,52 @@
-{% extends 'base.html' %}
-{% block title %}Home{% endblock title %}
-
-
-<style>
-{% block style %}
-h1{
-	color: red;
-}
-{% endblock style %}
-</style>
-
-{% block content %}
-<form action="" method="POST">
-	{% csrf_token %}
-	{{ form.as_p }}
-	<input type="submit" value="Register" class="btn btn-default">
-</form>
-<h1>Hello. We have {{ number }} embeded videos</h1>
-
-<div>
-	{% for video in videos %}
-		<div>{{ video.embed_code | safe}}</div>
-		<div><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></div>
-	{% endfor %}
+{% extends 'base.html' %} {% block title %}Home{% endblock title %} {% block jumbotron %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-6">
+            <h1>Welcome</h1>
+            <div>This is Amin</div>
+        </div>
+        <div class="col-sm-6">
+            <div>
+                <!-- Nav tabs -->
+                <ul class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#register" aria-controls="register" role="tab" data-toggle="tab">Register</a></li>
+                    <li role="presentation"><a href="#login" aria-controls="login" role="tab" data-toggle="tab">Login</a></li>
+                </ul>
+                <!-- Tab panes -->
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane active" id="register">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form action="{% url 'register' %}" method="POST">
+                                    {% csrf_token %} {{ register_form.as_p }}
+                                    <input type="submit" value="Register" class="btn btn-default">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane" id="login">
+                        <div class="panel panel-default">
+                            <div class="panel-body">
+                                <form action="{% url 'login' %}" method="POST">
+                                    {% csrf_token %} {{ login_form.as_p }}
+                                    <input type="submit" value="Login" class="btn btn-default">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
+{% endblock jumbotron%} {% block content %}
+<!-- <h1>Hello. We have {{ number }} embeded videos</h1>
+<div>
+    {% for video in videos %}
+    <div>{{ video.embed_code | safe}}</div>
+    <div><a href="{{ video.get_absolute_url }}">{{ video.title }}</a></div>
+    {% endfor %}
+</div> -->
 <!-- <h1>Mark Safe - Server-side handler</h1>
 <div>
 	{% for embed in embeds %}
@@ -31,4 +54,4 @@ h1{
 	{% endfor %}
 </div>
  -->
- {% endblock content %}
+{% endblock content %}

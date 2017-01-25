@@ -1,7 +1,8 @@
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib.auth import authenticate, login, logout
 
-from .forms import LoginForm
+from .models import MyUser
+from .forms import LoginForm, RegisterForm
 # Create your views here.
 
 def auth_login(request):
@@ -27,3 +28,30 @@ def auth_login(request):
 def auth_logout(request):
 	logout(request)
 	return HttpResponseRedirect("/")
+
+def auth_register(request):
+	if request.user.is_authenticated():
+		context = {}
+	form = RegisterForm(request.POST or None)
+
+	if form.is_valid():
+		username = form.cleaned_data["username"]
+		email = form.cleaned_data["email"]
+		password = form.cleaned_data["password2"]
+
+		new_user = MyUser()
+		new_user.username = username
+		new_user.email = email
+		new_user.set_password(password)
+		new_user.save()
+		return redirect("login")
+
+	context = {
+		"form": form,
+		"action_value": "",
+		"submit_btn_value": "Register",
+
+	}
+	return render(request, "register_form.html", context)
+
+

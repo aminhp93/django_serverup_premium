@@ -33,7 +33,10 @@
                 </li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
                 {% else %}
+                    {% if request.get_full_path != "/" %}
                 <li><a href="{% url 'login' %}">Login</a></li>
+                    {% endif %}
+
                 {% endif %}
             </ul>
         </div>

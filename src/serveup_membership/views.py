@@ -14,20 +14,20 @@ from .forms import LoginForm
 # @login_required
 # @login_required(login_url="/accounts/login/")
 def home(request):
-	form = RegisterForm(request.POST or None)
+	# register_form = RegisterForm(request.POST or None)
 
-	if form.is_valid():
-		username = form.cleaned_data["username"]
-		email = form.cleaned_data["email"]
-		password = form.cleaned_data["password2"]
+	# if form.is_valid():
+	# 	username = form.cleaned_data["username"]
+	# 	email = form.cleaned_data["email"]
+	# 	password = form.cleaned_data["password2"]
 
-		# MyUser.objects.create_user(username=username, email=email, password=password)
-		new_user = MyUser()
-		new_user.username = username
-		new_user.email = email
-		new_user.set_password(password)
-		new_user.save()
-		return redirect("login")
+	# 	# MyUser.objects.create_user(username=username, email=email, password=password)
+	# 	new_user = MyUser()
+	# 	new_user.username = username
+	# 	new_user.email = email
+	# 	new_user.set_password(password)
+	# 	new_user.save()
+	# 	return redirect("login")
 		# return HttpResponseRedirect(reverve('login'))
 
 
@@ -39,15 +39,21 @@ def home(request):
 	# 	safe_embed_code = format_html(mark_safe(video.embed_code))
 	# 	embeds.append("{}".format(safe_embed_code))
 
-	context = {
-		"form": form,
-		"action_value": "/",
-		"submit_btn_value": "Register"
-		# "videos": videos,
-		# "number": videos.count(),
-		# "embeds": embeds,
-	}
-	return render(request, "form.html", context)
+	if request.user.is_authenticated():
+		context = {}
+	else:
+		login_form = LoginForm()
+		register_form = RegisterForm()
+		context = {
+			"login_form": login_form,
+			"register_form": register_form,
+			"action_value": "/",
+			"submit_btn_value": "Register"
+			# "videos": videos,
+			# "number": videos.count(),
+			# "embeds": embeds,
+		}
+	return render(request, "home.html", context)
 	
 @login_required(login_url="/staff/login/")
 def staff_home(request):
