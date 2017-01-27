@@ -1,0 +1,31 @@
+{% extends 'base.html' %} {% block content %}
+<h1>Billing history</h1>
+<table class="table">
+    <thead>
+        <th>
+            Order #
+        </th>
+        <th>
+            Amount
+        </th>
+        <th>Card type</th>
+        <th>
+            Date
+        </th>
+    </thead>
+    {% for item in history %}
+    <tr>
+        <td>
+            {{ item.order_id }}
+        </td>
+        <td>
+            {{ item.amount }}
+        </td>
+        <td>{{ item.card_type }} {% if item.last_four %}Last four: {{ item.last_fourt }}{% endif %}</td>
+        <td>
+            {{ item.timestamp }}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -21,7 +21,7 @@ from django.conf import settings
 
 
 from accounts.views import auth_login, auth_logout, auth_register
-from billing.views import upgrade
+from billing.views import upgrade, billing_history
 from comments.views import comment_thread, comment_create
 from notifications.views import all, read, get_notifications_ajax
 from serveup_membership.views import home, staff_home
@@ -41,6 +41,7 @@ urlpatterns = [
 # membership/billing
 urlpatterns += [
     url(r'^upgrade/$', upgrade, name='account_upgrade'),
+    url(r'^billing/$', billing_history, name='billing_history'),
 ]
 
 # auth login/logout
