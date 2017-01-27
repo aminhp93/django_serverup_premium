@@ -1,9 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, Http404, HttpResponseRedirect, get_object_or_404
 
-from .models import Video, Category
+from analytics.signals import page_view
 from comments.models import Comment
 from comments.forms import CommentForm
+
+from .models import Video, Category
+
 # Create your views here.
 def category_list(request):
 	objs = Category.objects.all()
@@ -21,6 +24,11 @@ def video_detail(request, cat_slug, slug):
 	
 	cat = get_object_or_404(Category, slug=cat_slug)
 	obj = get_object_or_404(Video, slug=slug)
+	page_view.send(request.user, 
+		page_path = request.get_full_path(), 
+		notify_primary = obj, 
+		notify_secondary=cat
+		)
 	if request.user.is_authenticated() or obj.has_preview:
 		comments = obj.comment_set.all()
 		form = CommentForm(request.POST or None)
@@ -66,7 +74,11 @@ def video_detail(request, cat_slug, slug):
 @login_required
 def category_detail(request, cat_slug):
 	obj = get_object_or_404(Category, slug=cat_slug)
-	videos = obj.video_set.all()			
+	videos = obj.video_set.all()
+	page_view.send(request.user, 
+		page_path = request.get_full_path(), 
+		notify_primary = obj, 
+		)
 	context = {
 		"obj": obj,
 		"videos": videos,
