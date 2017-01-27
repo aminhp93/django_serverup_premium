@@ -5,6 +5,7 @@ from django.contrib.auth.signals import user_logged_in
 from django.db.models.signals import post_save
 from django.utils import timezone
 
+from billing.models import Membership
 from notifications.signals import notify
 
 class MyUserManager(BaseUserManager):
@@ -107,34 +108,16 @@ class MyUser(AbstractBaseUser):
 		return self.is_admin
 
 
-class Membership(models.Model):
-	user = models.OneToOneField(MyUser)
-	date_start = models.DateTimeField(default=timezone.now(), verbose_name="Start date")
-	date_end = models.DateTimeField(default=timezone.now(), verbose_name="End date")
-
-	def __str__(self):
-		return str(self.user.username)
-
-	def update_membership_status(self):
-		if membership_ojb.date_end >= timezone.now():
-			self.user.is_member = True
-			self.user.save()
-		elif membership_ojb.date_end < timezone.now():
-			self.user.is_member = False
-			self.user.save()
-		else:
-			pass
-
 def user_logged_in_signal(sender, signal, request, user, **kwargs):
 	print(sender, kwargs, "119")
 	request.session.set_expiry(30000)
-	membership_ojb, created = Membership.objects.get_or_create(user=user)
+	membership_obj, created = Membership.objects.get_or_create(user=user)
 	if created:
-		membership_ojb.date_start = timezone.now()
-		membership_ojb.save()
+		membership_obj.date_start = timezone.now()
+		membership_obj.save()
 		user.is_member = True
 		user.save()
-	membership_ojb.update_membership_status()
+	membership_obj.update_status()
 	
 user_logged_in.connect(user_logged_in_signal)
 

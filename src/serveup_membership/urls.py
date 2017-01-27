@@ -19,11 +19,13 @@ from django.views.generic import TemplateView
 from django.conf.urls.static import static
 from django.conf import settings
 
-from serveup_membership.views import home, staff_home
+
 from accounts.views import auth_login, auth_logout, auth_register
-from videos.views import video_detail, category_list, category_detail
+from billing.views import upgrade
 from comments.views import comment_thread, comment_create
 from notifications.views import all, read, get_notifications_ajax
+from serveup_membership.views import home, staff_home
+from videos.views import video_detail, category_list, category_detail
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -35,23 +37,30 @@ urlpatterns = [
     url(r'^projects/(?P<cat_slug>[\w-]+)/$', category_detail, name="project_detail"),
     url(r'^projects/(?P<cat_slug>[\w-]+)/(?P<slug>[\w-]+)/$', video_detail, name="video_detail"),
 ]
+
+# membership/billing
+urlpatterns += [
+    url(r'^upgrade/$', upgrade, name='account_upgrade'),
+]
+
 # auth login/logout
 urlpatterns += [
     url(r'^login/$', auth_login, name='login'),
     url(r'^logout/$', auth_logout, name='logout'),
     url(r'^register/$', auth_register, name='register'),
 ]
+
 # Comment Thread
 urlpatterns += [
     url(r'^comment/(?P<id>\d+)$', comment_thread, name="comment_thread"),
     url(r'^comment/create$', comment_create, name="comment_create"),
 ]
+
 # Notifications
 urlpatterns += [
     url(r'^notifications/$', all, name="notifications_all"),
     url(r'^notifications/ajax/$', get_notifications_ajax, name="notifications_ajax"),
     url(r'^notifications/read/(?P<id>\d+)/$', read, name="notifications_read"),
-    
 ]
     
 if settings.DEBUG:

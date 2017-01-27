@@ -30,47 +30,56 @@ def video_detail(request, cat_slug, slug):
 		notify_primary = obj, 
 		notify_secondary=cat
 		)
-	if request.user.is_member or obj.has_preview:
-		comments = obj.comment_set.all()
-		form = CommentForm(request.POST or None)
+	if request.user.is_authenticated() or obj.has_preview:
+		is_member = None
+		try:
+			is_member = request.user.is_member
+		except:
+			is_member = None
+		if is_member:
+			comments = obj.comment_set.all()
+			form = CommentForm(request.POST or None)
 
-		context = {
-			"obj": obj,
-			"comments": comments,
-			"form": form,
-		}
+			context = {
+				"obj": obj,
+				"comments": comments,
+				"form": form,
+			}
 
-		# if form.is_valid():
-		# 	parent_id = request.POST.get('parent_id')
-		# 	parent_comment = None
-		# 	if parent_id is not None:
-		# 		try:
-		# 			parent_comment = Comment.objects.get(id=parent_id)
-		# 		except:
-		# 			parent_comment = None
+			# if form.is_valid():
+			# 	parent_id = request.POST.get('parent_id')
+			# 	parent_comment = None
+			# 	if parent_id is not None:
+			# 		try:
+			# 			parent_comment = Comment.objects.get(id=parent_id)
+			# 		except:
+			# 			parent_comment = None
 
-		# 	comment_text = form.cleaned_data["comment"]
-		# 	new_comment = Comment.objects.create_comment(
-		# 		user = request.user,
-		# 		path = request.get_full_path(),
-		# 		text = comment_text,
-		# 		video = obj,
-		# 		parent = parent_comment,
-		# 		)
-		# 	return HttpResponseRedirect(obj.get_absolute_url())
+			# 	comment_text = form.cleaned_data["comment"]
+			# 	new_comment = Comment.objects.create_comment(
+			# 		user = request.user,
+			# 		path = request.get_full_path(),
+			# 		text = comment_text,
+			# 		video = obj,
+			# 		parent = parent_comment,
+			# 		)
+			# 	return HttpResponseRedirect(obj.get_absolute_url())
 
 
-			# obj_instance = form.save(commit=False)
-			# obj_instance.path = request.get_full_path()
-			# obj_instance.user = request.user
-			# obj_instance.video = obj
-			# obj_instance.save()
+				# obj_instance = form.save(commit=False)
+				# obj_instance.path = request.get_full_path()
+				# obj_instance.user = request.user
+				# obj_instance.video = obj
+				# obj_instance.save()
 
-		return render(request, "video_detail.html", context)
+			return render(request, "video_detail.html", context)
+		else:
+			# UPGRADE ACCOUNT 
+			next_url = obj.get_absolute_url()
+			return HttpResponseRedirect("{}?next={}".format(reverse("account_upgrade"), next_url))
 	else:
 		next_url = obj.get_absolute_url()
 		return HttpResponseRedirect("{}?next={}".format(reverse("login"), next_url))
-
 
 @login_required
 def category_detail(request, cat_slug):

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     # app
     'accounts',
     'analytics',
+    'billing',
     'comments',
     'notifications',
     'videos',
