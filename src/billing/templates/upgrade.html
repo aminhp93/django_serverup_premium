@@ -1,4 +1,23 @@
 {% extends 'base.html' %}
+<script>
+{% block jquery %}
+
+braintree.setup("{{ client_token }}", "dropin", {
+  container: "payment-form",
+  form: "checkout"
+});
+
+{% endblock %}
+</script>
 {% block content %}
 <h1>Upgrade your account</h1>
+<div class="col-sm-4">
+	
+
+<form id="checkout" method="post" action=".">
+	{% csrf_token %}
+  <div id="payment-form"></div>
+  <input type="submit" value="Pay $10" class="btn btn-default btn-block">
+</form>
+</div>
 {% endblock %}

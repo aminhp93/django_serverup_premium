@@ -16,6 +16,8 @@ braintree.Configuration.configure(braintree.Environment.Sandbox,
 PLAN_ID = "monthly_plan"
 
 def upgrade(request):
+	client_token = braintree.ClientToken.generate()
+
 	if request.user.is_authenticated():
 		try:
 			# something to get the current customer id stored somewhere
@@ -40,7 +42,7 @@ def upgrade(request):
 			membership_instance, created = Membership.objects.get_or_create(user=request.user)
 			membership_dates_update.send(membership_instance, new_date_start=trans.timestamp)
 	context = {
-	
+		"client_token": client_token,
 	}
 	return render(request, "upgrade.html", context)
 
