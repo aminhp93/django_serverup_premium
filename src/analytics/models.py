@@ -5,13 +5,33 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+from videos.models import Video, Category
 from .signals import page_view
+
+class PageViewQueryset(models.query.QuerySet):
+	def videos(self):
+		content_type = ContentType.objects.get_for_model(Video)
+		return self.filter(primary_content_type = content_type)
+
+	def categories(self):
+		content_type = ContentType.objects.get_for_model(Category)
+		return self.filter(primary_content_type = content_type)
+	
+class PageViewManager(models.Manager):
+	def get_queryset(self):
+		return PageViewQueryset(self.model, using=self._db)
+
+	def get_videos(self):
+		return self.get_queryset().videos()
+
+	def get_categories(self):
+		return self.get_queryset().categories()
 
 class PageView(models.Model):
 	path = models.CharField(max_length=350)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
 	# count = models.PositiveIntegerField(default=1)
-	timestamp = models.DateField(default=timezone.now())
+	timestamp = models.DateTimeField(default=timezone.now())
 
 	primary_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name="notify_primary", null=True, blank=True)
 	primary_object_id = models.PositiveIntegerField(null=True, blank=True)
@@ -21,8 +41,13 @@ class PageView(models.Model):
 	secondary_object_id = models.PositiveIntegerField(null=True, blank=True)
 	secondary_content_object = GenericForeignKey('secondary_content_type', 'secondary_object_id')
 
+	objects = PageViewManager()
+
 	def __str__(self):
 		return self.path
+
+	class Meta:
+		ordering = ['-timestamp']
 
 def page_view_received(sender, **kwargs):
 	kwargs.pop("signal", None)
@@ -46,7 +71,7 @@ def page_view_received(sender, **kwargs):
 		new_page_view.secondary_object_id = notify_secondary.id
 		new_page_view.secondary_content_type = ContentType.objects.get_for_model(notify_secondary)
 		new_page_view.save()
-		
+
 	# if not created:
 	# 	new_page_view.count += 1
 	# 	new_page_view.save()

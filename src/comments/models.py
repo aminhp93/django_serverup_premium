@@ -9,6 +9,9 @@ class CommentManager(models.Manager):
 	def all(self):
 		return super().filter(active=True).filter(parent=None)
 
+	def recent(self):
+		return super().filter(active=True).filter(parent=None)[:3]
+
 	def create_comment(self, user=None, text=None, path=None, video=None, parent=None):
 		if not path:
 			raise ValueError("Must include path when adding comment")
@@ -53,6 +56,10 @@ class Comment(models.Model):
 	@property
 	def get_origin(self):
 		return self.path
+
+	@property
+	def get_preview(self):
+		return self.text[:20]
 
 	@property
 	def get_comment(self):

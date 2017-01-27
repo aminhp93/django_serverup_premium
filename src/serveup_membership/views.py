@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe
 from accounts.forms import RegisterForm
 from accounts.models import MyUser
 from videos.models import Video
+from comments.models import Comment
 
 from .forms import LoginForm
 
@@ -45,10 +46,25 @@ def home(request):
 		
 		)
 	if request.user.is_authenticated():
-		context = {}
+		page_view_objs = request.user.pageview_set.get_videos()[:2]
+		print(page_view_objs)
+		recent_videos = []
+		for obj in page_view_objs:
+			if not obj.primary_content_object in recent_videos:
+				recent_videos.append(obj.primary_content_object)
+
+		recent_comments = Comment.objects.recent()
+		print(recent_comments)
+		template = "home_logged_in.html"
+
+		context = {
+			"recent_videos": recent_videos,
+			"recent_comments": recent_comments,
+		}
 	else:
 		login_form = LoginForm()
 		register_form = RegisterForm()
+		template = "home_visitor.html"
 		context = {
 			"login_form": login_form,
 			"register_form": register_form,
@@ -58,7 +74,7 @@ def home(request):
 			# "number": videos.count(),
 			# "embeds": embeds,
 		}
-	return render(request, "home.html", context)
+	return render(request, template, context)
 	
 @login_required(login_url="/staff/login/")
 def staff_home(request):
