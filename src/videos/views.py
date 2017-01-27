@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, Http404, HttpResponseRedirect
+from django.shortcuts import render, Http404, HttpResponseRedirect, get_object_or_404
 
 from .models import Video, Category
 from comments.models import Comment
@@ -18,14 +18,10 @@ def category_list(request):
 def video_detail(request, cat_slug, slug):
 	# path = request.get_full_path()
 	# comments = Comment.objects.filter(path=path)
-	try:
-		cat = Category.objects.get(slug=cat_slug)
-		
-	except:
-		raise Http404
-
-	try:
-		obj = Video.objects.get(slug=slug)
+	
+	cat = get_object_or_404(Category, slug=cat_slug)
+	obj = get_object_or_404(Video, slug=slug)
+	if request.user.is_authenticated() or obj.has_preview:
 		comments = obj.comment_set.all()
 		form = CommentForm(request.POST or None)
 
@@ -62,32 +58,17 @@ def video_detail(request, cat_slug, slug):
 			# obj_instance.save()
 
 		return render(request, "video_detail.html", context)
-	except:
-		raise Http404
+	else:
+		next_url = obj.get_absolute_url()
+		return HttpResponseRedirect("{}?next={}".format(reverse("login"), next_url))
+
 
 @login_required
 def category_detail(request, cat_slug):
-	try:
-		obj = Category.objects.get(slug=cat_slug)
-		videos = obj.video_set.all()
-		form = CommentForm(request.POST or None)
-			
-		context = {
-			"obj": obj,
-			"videos": videos,
-		}
-		return render(request, "category_detail.html", context)
-	except:
-		raise Http404
-
-# def video_edit(request):
-# 	context = {
-	
-# 	}
-# 	return render(request, "video_edit.html", context)
-
-# def video_delete(request):
-# 	context = {
-	
-# 	}
-# 	return render(request, "video_delete.html", context)
+	obj = get_object_or_404(Category, slug=cat_slug)
+	videos = obj.video_set.all()			
+	context = {
+		"obj": obj,
+		"videos": videos,
+	}
+	return render(request, "category_detail.html", context)

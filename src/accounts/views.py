@@ -30,8 +30,7 @@ def auth_logout(request):
 	return HttpResponseRedirect("/")
 
 def auth_register(request):
-	if request.user.is_authenticated():
-		context = {}
+	
 	form = RegisterForm(request.POST or None)
 
 	if form.is_valid():

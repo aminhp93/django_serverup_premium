@@ -1,20 +1,35 @@
-{% extends 'base.html' %}
-
-{% block content %}
-
-<div>
-	<h1>Category title: {{ obj.title }}</h1>
-	<h3>Video lists:</h3>
-	{% for video in videos %}
-	<div>
-		<a href="{{ video.get_absolute_url }}">{{ video.order }} - {{ video.title }}</a>
-		<div>{{ video.get_previous_url }}</div>
-		<div>{{ video.get_next_url }}</div>
-	</div>
-	{% endfor %}
-	
-	{% for comment in comments %}
-	<div>{{ comment }}</div>
-	{% endfor %}
+{% extends 'base.html' %} {% block jumbotron %}
+<div class="jumbotron">
+    <div class="row">
+        <div class="col-sm-6">
+            Category title: {{ obj.title }}
+        </div>
+        <div class="col-sm-6">
+            <img src="{{ obj.get_image_url }}" alt="" class="img-responsive">
+        </div>
+    </div>
+</div>
+{% endblock %} {% block content %}
+<div class="col-sm-8 col-sm-offset-2">
+{% if videos %}
+    <table class="table">
+    	<thead>
+    		<th>#</th>
+    		<th>Video</th>
+    	</thead>
+        {% for video in videos %}
+        <tr>
+        	<td>{{ forloop.counter }}</td>
+        	<td>
+        		{% if request.user.is_authenticated %}
+        		<a href="{{ video.get_absolute_url }}">{{ video.order }} - {{ video.title }}</a>
+        		{% endif %}
+        	</td>
+        </tr>
+        {% endfor %}
+    </table>
+{% else %}
+	<div>Project will come soon</div>
+{% endif %}
 </div>
 {% endblock content %}

@@ -10,7 +10,7 @@ from videos.models import Video
 
 from .forms import LoginForm
 
-
+from analytics.signals import page_view
 # @login_required
 # @login_required(login_url="/accounts/login/")
 def home(request):
@@ -39,6 +39,11 @@ def home(request):
 	# 	safe_embed_code = format_html(mark_safe(video.embed_code))
 	# 	embeds.append("{}".format(safe_embed_code))
 
+	page_view.send(
+		request.user,
+		page_path = request.get_full_path(),
+		
+		)
 	if request.user.is_authenticated():
 		context = {}
 	else:

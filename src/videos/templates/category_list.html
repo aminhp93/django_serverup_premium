@@ -3,10 +3,9 @@
 {% block content %}
 
 <div>
-	{{ objs }}
 	{% for obj in objs %}
-		<div><a href="{{ obj.get_absolute_url }}">{{ obj.title }}</a></div>
-		<div><a href="{{ obj.get_absolute_url }}"><img src="{{ obj.get_image_url }}" class="img-responsive" alt=""></a></div>
+		<h1 class="col-sm-6"><a href="{{ obj.get_absolute_url }}">Title: {{ obj.title }}</a></h1>
+		<div class="col-sm-6"><a href="{{ obj.get_absolute_url }}"><img src="{{ obj.get_image_url }}" class="img-responsive" alt=""></a></div>
 
 	{% endfor %}
 </div>
