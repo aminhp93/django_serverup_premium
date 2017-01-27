@@ -8,6 +8,9 @@ from django.db.models.signals import post_save
 from .signals import membership_dates_update
 
 # Create your models here.
+
+
+
 class Membership(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL)
 	date_start = models.DateTimeField(default=timezone.now(), verbose_name="Start date")
@@ -25,7 +28,6 @@ class Membership(models.Model):
 			self.user.save()
 		else:
 			pass
-
 
 def update_membership_status(sender, instance, created, **kwargs):
 	if not created:
@@ -97,3 +99,11 @@ class Transaction(models.Model):
 
 	class Meta:
 		ordering = ['-timestamp']
+
+class UserMerchantId(models.Model):
+	user = models.OneToOneField(settings.AUTH_USER_MODEL)
+	customer_id = models.CharField(max_length=120)
+	merchant_name = models.CharField(max_length=120, default="Braintree")
+
+	def __str__(self):
+		return self.customer_id
