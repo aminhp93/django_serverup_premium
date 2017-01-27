@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, Http404, HttpResponseRedirect, get_object_or_404
+from django.core.urlresolvers import reverse
 
 from analytics.signals import page_view
 from comments.models import Comment
@@ -29,7 +30,7 @@ def video_detail(request, cat_slug, slug):
 		notify_primary = obj, 
 		notify_secondary=cat
 		)
-	if request.user.is_authenticated() or obj.has_preview:
+	if request.user.is_member or obj.has_preview:
 		comments = obj.comment_set.all()
 		form = CommentForm(request.POST or None)
 
