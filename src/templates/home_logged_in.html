@@ -1,27 +1,45 @@
 {% extends 'base.html' %} {% block title %}Home{% endblock title %} {% block jumbotron %} {% endblock jumbotron%} {% block content %}
 <div class="row">
-    {% if recent_videos %}
     <div class="col-sm-4">
-        <h1>Recent videos:</h1> {% for vid in recent_videos %}
-        <div><a href="{{ vid.get_absolute_url }}">{{ vid.title }}</a></div>
-        {% if forloop.counter == 1 %}
-        <div>
-            <a href="{{ vid.get_absolute_url }}"><img src="{{ vid.category.get_image_url }}" alt="" class="img-responsive"></a>
+        <div class="row">
+            {% if recent_videos %}
+            <div class="col-sm-12">
+                <h1>Recent videos:</h1> {% for vid in recent_videos %}
+                <div><a href="{{ vid.get_absolute_url }}">{{ vid.title }}</a></div>
+                {% if forloop.counter == 1 %}
+                <div>
+                    <a href="{{ vid.get_absolute_url }}"><img src="{{ vid.category.get_image_url }}" alt="" class="img-responsive"></a>
+                </div>
+                {% endif %} {% endfor %}
+            </div>
+            {% endif %} {% if popular_videos %}
+            <div class="col-sm-12">
+                <h1>Popular videos:</h1> {% for vid in popular_videos %}
+                <div><a href="{{ vid.get_absolute_url }}">{{ vid.title }}</a></div>
+                {% if forloop.counter == 1 %}
+                <div>
+                    <a href="{{ vid.get_absolute_url }}"><img src="{{ vid.category.get_image_url }}" alt="" class="img-responsive"></a>
+                </div>
+                {% endif %} {% endfor %}
+            </div>
+            {% endif %}
         </div>
-        {% endif %} {% endfor %}
     </div>
-    {% endif %} {% if recent_comments %}
     <div class="col-sm-8">
-        <h1>Recent comments:</h1>
-        <table class="table">
-            {% for comment in recent_comments %}
-            <tr>
-                <td>{{ comment.get_preview | truncatechars:30 }} <br> <small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago</small></td>
-                <td><a href="{{ comment.get_absolute_url }}">View</a></td>
-            </tr>
-            {% endfor %}
-        </table>
+        {% if recent_comments %}
+        <div class="col-sm-8">
+            <h1>Recent comments:</h1>
+            <table class="table">
+                {% for comment in recent_comments %}
+                <tr>
+                    <td>{{ comment.get_preview | truncatechars:30 }}
+                        <br> <small>via {{ comment.user }} | {{ comment.timestamp|timesince }} ago</small></td>
+                    <td><a href="{{ comment.get_absolute_url }}">View</a></td>
+                </tr>
+                {% endfor %}
+            </table>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
 </div>
 {% endblock content %}

@@ -3,9 +3,12 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, HttpResponseRedirect, redirect
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
+from django.db.models import Count
+from django.contrib.contenttypes.models import ContentType
 
 from accounts.forms import RegisterForm
 from accounts.models import MyUser
+from analytics.models import PageView
 from videos.models import Video
 from comments.models import Comment
 
@@ -47,19 +50,38 @@ def home(request):
 		)
 	if request.user.is_authenticated():
 		page_view_objs = request.user.pageview_set.get_videos()[:2]
-		print(page_view_objs)
 		recent_videos = []
 		for obj in page_view_objs:
 			if not obj.primary_content_object in recent_videos:
 				recent_videos.append(obj.primary_content_object)
 
 		recent_comments = Comment.objects.recent()
-		print(recent_comments)
+
+		# top items
+		video_type = ContentType.objects.get_for_model(Video)
+		popular_videos_list = PageView.objects.filter(primary_content_type=video_type)\
+		.values("primary_object_id")\
+		.annotate(the_count=Count("primary_object_id"))\
+		.order_by("-the_count")[:2]
+
+		popular_videos = []
+		for item in popular_videos_list:
+			try:
+				new_video = Video.objects.get(id=item["primary_object_id"])
+				popular_videos.append(new_video)
+			except:
+				pass
+		
+
+		# one item
+		# PageView.objects.filter(primary_content_type=video_type, primary_object_id=2).count()
+
 		template = "home_logged_in.html"
 
 		context = {
 			"recent_videos": recent_videos,
 			"recent_comments": recent_comments,
+			"popular_videos": popular_videos,
 		}
 	else:
 		login_form = LoginForm()
