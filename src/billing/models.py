@@ -13,8 +13,8 @@ from .signals import membership_dates_update
 
 class Membership(models.Model):
 	user = models.OneToOneField(settings.AUTH_USER_MODEL)
-	date_start = models.DateTimeField(default=timezone.now(), verbose_name="Start date")
-	date_end = models.DateTimeField(default=timezone.now(), verbose_name="End date")
+	date_start = models.DateTimeField(default=timezone.now, verbose_name="Start date")
+	date_end = models.DateTimeField(default=timezone.now, verbose_name="End date")
 
 	def __str__(self):
 		return str(self.user.username)

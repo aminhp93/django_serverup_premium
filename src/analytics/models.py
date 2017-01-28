@@ -31,7 +31,7 @@ class PageView(models.Model):
 	path = models.CharField(max_length=350)
 	user = models.ForeignKey(settings.AUTH_USER_MODEL, null=True, blank=True)
 	# count = models.PositiveIntegerField(default=1)
-	timestamp = models.DateTimeField(default=timezone.now())
+	timestamp = models.DateTimeField(default=timezone.now)
 
 	primary_content_type = models.ForeignKey(ContentType, on_delete=models.CASCADE, related_name="notify_primary", null=True, blank=True)
 	primary_object_id = models.PositiveIntegerField(null=True, blank=True)
